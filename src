@@ -1,0 +1,67 @@
+a)
+public void UpdateRacers(float deltaTimeS, List<Racer> racers)
+        {
+            List<Racer> racersToRemove = new List<Racer>();
+
+            // Updates the racers that are alive
+            for (racerIndex = 0; racerIndex < racers.Count; racerIndex++)
+            {
+                    if ( racers[racerIndex].IsAlive() )
+                        racers[racerIndex].Update(deltaTimeS * 1000); //Racer update takes milliseconds
+            }
+            
+            // Collides
+            Racer racer1 = racers[0]
+            Racer racer1 = racers[0]
+            for (int racerIndex1 = 0; racerIndex1 < racers.Count; racerIndex1++)
+            {
+                for (int racerIndex2 = racerIndex1 + 1; racerIndex2 < racers.Count; racerIndex2++)
+                {
+                    racer1 = racers[racerIndex1];
+                    racer2 = racers[racerIndex2];
+                        if (racer1.IsCollidable() && racer2.IsCollidable() && racer1.CollidesWith(racer2))
+                        {
+                            OnRacerExplodes(racer1);
+                            racersToRemove.Add(racer1);
+                            racersToRemove.Add(racer2);
+                        }
+                }
+            }
+            // Gets the racers that are still alive
+            List<Racer> newRacerList = new List<Racer>();
+            for (racerIndex = 0; racerIndex < racers.Count; racerIndex++)
+            {
+                // check if this racer must be removed
+                if ( !racersToRemove.Contains( racers[racerIndex] ) )
+                    newRacerList.Add(racers[racerIndex]);
+            }
+            // Point 1
+
+            // Get rid of all the exploded racers
+            for (racerIndex = 0; racerIndex < racersToRemove.Count; racerIndex++)
+            {
+                int foundRacerIndex = racers.IndexOf(racersToRemove[racerIndex]);
+                if (foundRacerIndex >= 0) // Check we've not removed this already!
+                {
+                    racers[foundRacerIndex].Destroy();
+                    racers.RemoveAt(foundRacerIndex);
+                }
+            }
+
+            // Builds the list of remaining racers
+            racers.Clear();
+            for (racerIndex = 0; racerIndex < newRacerList.Count; racerIndex++)
+            {
+                racers.Add(newRacerList[racerIndex]);
+            }
+            
+            for (racerIndex = 0; racerIndex < newRacerList.Count; racerIndex++)
+            {
+                newRacerList.RemoveAt(0);
+            }
+            // Point 2
+        }
+b) В качестве изменения поведения я бы убрал участки кода от "//Gets the racers that are still alive" до "Point 1" 
+и от "// Builds the list of remaining racers" до "Point 2". Без перемещения объектов из листа в лист 
+получим более производительный и менее вводящий в заблуждение код. 
+Код в указанных участках не менял(или менял незначительно), поскольку лучший способ сделать его более читабельным и производительным - удалить.
